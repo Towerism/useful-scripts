@@ -1,0 +1,20 @@
+#!/bin/env sh
+#-*- mode: sh-mode -*-
+
+# This script will take a directory name x and a prefix y as arguments.
+# It will copy directory x to temp directory x-y, perform make clean in x-y,
+# remove .git directory if it exists, and then will tar x-y into x-y.tar.gz.
+# Finally it will remove the temp directory x-y.
+
+set -x
+
+DIR=$1
+PREFIX=$2
+TARBALL_DIR="$PREFIX-$DIR"
+
+cp -r "$DIR" "$TARBALL_DIR"
+rm -rf "$TARBALL_DIR/.git"
+make -C "$TARBALL_DIR" clean
+tar -czvf "$TARBALL_DIR.tar.gz" "$TARBALL_DIR"
+rm -rf "$TARBALL_DIR"
+
